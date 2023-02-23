@@ -34,10 +34,9 @@ machine, I was able containerize the application and push it to dockerhub. You c
 ## Launch an EC2 instance with docker installed
 
 Using this [article](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/create-container-image.html#create-container-image-install-docker)
-as a guide, I was able to install docker on my EC2 instance. I pulled the image I created earlier from dockerhub
-and ran the docker image. You can view the output below ![docker output on ec2 instance](https://github.com/Kaytbode/aws-bootcamp-cruddur-2023/blob/main/journal/ec2%20docker.png)
+as a guide, I installed docker on my EC2 instance, pulled and ran the image I created earlier from dockerhub. You can view the output below ![docker output on ec2 instance](https://github.com/Kaytbode/aws-bootcamp-cruddur-2023/blob/main/journal/ec2%20docker.png)
 
 ## Implement a health check in the V3 docker-compose file
 
-I implemented a health check service to the Cruddur docker-compose.yml file and I was able to confirm it was active by using
+I implemented a health check service to the Cruddur docker-compose.yml file and confirmed that it was active by using
 the `docker ps` command. ![health check ](https://github.com/Kaytbode/aws-bootcamp-cruddur-2023/blob/main/journal/health-check.png)
