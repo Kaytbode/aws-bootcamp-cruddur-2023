@@ -31,6 +31,9 @@ import watchtower
 import logging
 from time import strftime
 
+# token module
+from lib.cognito_jwt_token import CognitoJwtToken, TokenVerifyError
+
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
 console_handler = logging.StreamHandler()
@@ -68,9 +71,16 @@ origins = [frontend, backend]
 cors = CORS(
   app, 
   resources={r"/api/*": {"origins": origins}},
-  expose_headers="location,link",
-  allow_headers="content-type,if-modified-since",
+  headers=['Content-Type', 'Authorization'], 
+  expose_headers='Authorization',
   methods="OPTIONS,GET,HEAD,POST"
+)
+
+# Cognito JWT token initialization
+jwt_token = CognitoJwtToken(
+  user_pool_id=os.getenv("AWS_COGNITO_USER_POOL_ID"), 
+  user_pool_client_id=os.getenv("AWS_COGNITO_USER_POOL_CLIENT_ID"),
+  region=os.getenv("AWS_DEFAULT_REGION")
 )
 
 rollbar_access_token = os.getenv('ROLLBAR_ACCESS_TOKEN')
@@ -139,7 +149,12 @@ def data_create_message():
 @app.route("/api/activities/home", methods=['GET'])
 @cross_origin()
 def data_home():
-  data = HomeActivities.run(logger=LOGGER)
+  """ authenticate user """
+  try:
+    jwt_token.verify(request.headers)
+    data = HomeActivities.run(cognito_user_id=jwt_token.claims['username'], logger=LOGGER)
+  except TokenVerifyError as e:
+    data = HomeActivities.run(logger=LOGGER)
   return data, 200
 
 @app.route("/api/activities/notifications", methods=['GET'])
