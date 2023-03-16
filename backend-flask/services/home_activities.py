@@ -13,9 +13,9 @@ class HomeActivities:
       now = datetime.now(timezone.utc).astimezone()
       span.set_attribute("app.now", now.isoformat())
 
-      sql = """
+      sql = query_wrap_array("""
       SELECT * FROM activities
-      """
+      """)
       with pool.connection() as conn:
         with conn.cursor() as cur:
           cur.execute(sql)
@@ -23,6 +23,7 @@ class HomeActivities:
           # the first field being the data
           json = cur.fetchall()
           results = json[0]
+          print(result)
 
       if cognito_user_id is not None:
         extra_crud = {
