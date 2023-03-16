@@ -18,3 +18,10 @@ Flask-AWSCognito
 
 psycopg[binary]
 psycopg[pool]
+
+
+export DB_SG_ID="sg-0911c328186265e8f"
+gp env DB_SG_ID="sg-0911c328186265e8f"
+
+export DB_SG_RULE_ID="sgr-093d181eb7f251708"
+gp env DB_SG_RULE_ID="sgr-093d181eb7f251708"
